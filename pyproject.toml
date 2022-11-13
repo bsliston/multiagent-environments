@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "multiagent-environments"
+version = "0.1.0"
+description = ""
+authors = ["Brandon Liston <liston0456@aol.com>"]
+readme = "README.md"
+packages = [{include = "multiagent_environments"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,11 +1,11 @@
-"""Abstract Pong multi-agent environment implementation.
+"""Simple Pong multi-agent environment implementation.
 
 This environment is a PettingZoo multi-agent environment implementation of the
 game Pong. The observation space of this environment is meant to be abstracted
-and return abstracted features only.
+and return non-raw features only.
 """
 
-from typing import Optional, Tuple, Dict, List
+from typing import Optional, Tuple, Dict, List, Union
 import gymnasium
 import numpy as np
 from pettingzoo.utils.env import ParallelEnv, ObsDict, ActionDict
@@ -26,8 +26,8 @@ StepInformation = Tuple[
 ]
 
 
-class PongAbstract(ParallelEnv):
-    """Abstracted pong multiagent environment.
+class SimplePong(ParallelEnv):
+    """Simple pong multiagent environment.
 
     Pong abstract multiagent environment for experimental reinforcement
     learning applications that desire a simplistic abstracted observation
@@ -45,14 +45,16 @@ class PongAbstract(ParallelEnv):
             spaces in the enviroment.
     """
 
-    def __init__(self):
-        """Initializes abstracted pong environment."""
-        # The environment PongAbstract is setup a non-configurable 1 vs 1
+    def __init__(self, observation_type: str = "human"):
+        """Initializes simple pong environment."""
+        # The environment SimplePong is setup a non-configurable 1 vs 1
         # (2 agent) environment. Each agent has an action space, which they can
         # only move up, down, or not move their cursors.
-        env_name: str = "pong_abstract"
+        env_name: str = "simple_pong"
         num_players: int = 2
         action_size: int = 3
+
+        self._observation_type = observation_type
 
         self.metadata = {
             "render_modes": ["human", "rgb_array"],
@@ -124,15 +126,33 @@ class PongAbstract(ParallelEnv):
         """
         raise NotImplementedError
 
-    def render(self) -> None | np.ndarray | str | List:
-        """Displays a rendered frame from the environment, if supported.
-        Alternate render modes in the default environments are `'rgb_array'`
-        which returns a numpy array and is supported by all environments outside
-        of classic, and `'ansi'` which returns the strings printed
-        (specific to classic environments).
+    def render(self) -> Union[None, np.ndarray, str, List]:
+        """Renders the current environment state.
+
+        Renders the current environment state and either displays it to the
+        user or returns the environment rendering as an array. Note, rendering
+        type is specified in the initialization of the environment.
+
+        Returns:
+            Environment rendering.
         """
         raise NotImplementedError
 
+    def close(self) -> None:
+        """Closes rendering window."""
+        raise NotImplementedError
+
+    def state(self) -> np.ndarray:
+        """Returns the global environment state of all agents.
+
+        Returns:
+            Global environment observation state.
+        """
+        return NotImplemented
+
 
 if __name__ == "__main__":
-    pass
+    import pdb
+
+    env = SimplePong()
+    pdb.set_trace()
